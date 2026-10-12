@@ -1,4 +1,5 @@
 import openai
+from openai import OpenAI
 import os
 import json
 import requests
@@ -19,7 +20,7 @@ warnings.filterwarnings("ignore")
 openai.api_key = openai_api_key
 os.environ["TOGETHER_API_KEY"] = together_api_key
 
-def prompt_llm_model(system_prompt, user_prompt, cfg, temp, judge, schema, mode):
+def prompt_llm_model(system_prompt, user_prompt, cfg, temp, judge, schema, mode, task=None):
     
     if mode == "base":
         if cfg.translation_model.provider == "openai":
@@ -28,6 +29,8 @@ def prompt_llm_model(system_prompt, user_prompt, cfg, temp, judge, schema, mode)
             output = prompt_google_model(system_prompt, user_prompt, cfg, temp, judge)
         elif cfg.translation_model.provider == "together":
             output = prompt_together_model(system_prompt, user_prompt, cfg, temp, judge)
+        elif cfg.translation_model.provider == "local":
+            output = prompt_vllm_model(system_prompt, user_prompt, cfg, temp, judge)
         elif cfg.translation_model.provider == "openrouter":
             output = prompt_openrouter_model(system_prompt, user_prompt, cfg, temp, judge)
         else:
@@ -41,6 +44,9 @@ def prompt_llm_model(system_prompt, user_prompt, cfg, temp, judge, schema, mode)
             output = output_dict
         elif cfg.translation_model.provider == "together":
             output_dict = prompt_together_model_structured(system_prompt, user_prompt, cfg, schema, temp, judge)
+            output = output_dict
+        elif cfg.translation_model.provider == "local":
+            output_dict = prompt_vllm_model_structured(system_prompt, user_prompt, cfg, schema, temp, judge)
             output = output_dict
         elif cfg.translation_model.provider == "openrouter":
             output_dict = prompt_openrouter_model_structured(system_prompt, user_prompt, cfg, schema, temp, judge)
@@ -507,7 +513,7 @@ def prompt_vllm_model_structured(system_prompt, user_prompt, cfg, schema=None, t
             output = response.choices[0].message.parsed
             print(output)
             
-        except Exception:
+        except Exception as e:
             time.sleep(0.1)
             print(e)
             continue

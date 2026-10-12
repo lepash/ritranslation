@@ -18,7 +18,10 @@ Options:
 EOF
 }
 
-source test-env/bin/activate
+# Use the repo's venv when present; inside a container vllm is usually on PATH already.
+if [[ -f test-env/bin/activate ]]; then
+    source test-env/bin/activate
+fi
 
 # Defaults (can be overridden by env vars or CLI flags)
 MODEL_NAME="${MODEL_NAME:-}"

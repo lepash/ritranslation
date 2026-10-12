@@ -198,7 +198,7 @@ task_config:
 | Google Gemini | `gemini-2.0-flash` | `provider: "google"` |
 | TogetherAI | `meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo` | `provider: "together"` |
 | OpenRouter | `anthropic/claude-3-sonnet` | `provider: "openrouter"` |
-| Local vLLM | Custom model | `provider: "vllm"` |
+| Local vLLM | Custom model | `provider: "local"` |
 
 TODO: add Cohere API👀
 

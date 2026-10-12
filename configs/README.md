@@ -243,7 +243,7 @@ translation_model:
 ```yaml
 translation_model:
   name: "your-model-name"
-  provider: "vllm"
+  provider: "local"
   device: "cuda:0"
 ```
 

@@ -525,7 +525,7 @@ def prompt_vllm_model_structured(system_prompt, user_prompt, cfg, schema=None, t
             )
             output = response.choices[0].message.parsed
             
-        except Exception:
+        except Exception as e:
             time.sleep(0.1)
             print(e)
             continue
